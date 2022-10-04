@@ -46,8 +46,14 @@ public class BoardController {
 
     @GetMapping("/boards/view")
     public String boardView(Model model, Integer id) throws SQLException {
-        log.info("id={}",id);
-        model.addAttribute("board",service.boardView(id));
+        log.info("id={}", id);
+        model.addAttribute("board", service.boardView(id));
         return "BoardView";
+    }
+
+    @GetMapping("/boards/delete")
+    public String boardDelete(Integer id) {
+        service.boardDelete(id);
+        return "redirect:/boards";
     }
 }
