@@ -6,6 +6,7 @@ import study.board.Board;
 import study.board.Repository.BoardRepository;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,4 +17,9 @@ public class BoardService {
     public void write(Board board) throws SQLException {
         repository.save(board);
     }
+
+    public List<Board> boardList() throws SQLException {
+      return repository.findAll();
+    }
+
 }

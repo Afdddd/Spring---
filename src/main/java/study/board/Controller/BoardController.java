@@ -18,6 +18,7 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public class BoardController {
 
+
     private final BoardService service;
 
     @RequestMapping("/")
@@ -25,7 +26,6 @@ public class BoardController {
         log.info("home controller");
         return "home";
     }
-
 
     @GetMapping("/boards/write")
     public String createForm() {
@@ -39,5 +39,11 @@ public class BoardController {
         log.info("create");
 
         return "redirect:/";
+    }
+
+    @GetMapping("/boards")
+    public String boardList(Model model) throws SQLException {
+        model.addAttribute("list",service.boardList());
+        return "BoardList";
     }
 }

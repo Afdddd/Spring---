@@ -85,6 +85,7 @@ public class BoardRepository {
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
             List<Board> list = getList(rs);
+
             return list;
         } catch (SQLException e) {
             log.error("DB error",e);
