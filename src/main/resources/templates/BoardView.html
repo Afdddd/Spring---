@@ -10,5 +10,7 @@
     <p th:text="${board.contents}">내용</p>
 
     <a th:href="@{/boards/delete(id=${board.id})}">삭제</a>
+    <a th:href="@{/boards/update/{id}(id=${board.id})}">수정</a>
+
 </body>
 </html>

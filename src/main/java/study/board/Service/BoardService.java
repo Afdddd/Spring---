@@ -39,4 +39,8 @@ public class BoardService {
         repository.delete(id);
     }
 
+    public void boardUpdate(int id, Board board) throws SQLException {
+        repository.update(id, board);
+    }
+
 }

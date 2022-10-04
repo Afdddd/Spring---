@@ -56,4 +56,18 @@ public class BoardController {
         service.boardDelete(id);
         return "redirect:/boards";
     }
+
+    @GetMapping("/boards/update/{id}")
+    public String updateForm(@PathVariable("id") Integer id, Model model) throws SQLException {
+        Board board = service.boardView(id);
+        model.addAttribute("board", board);
+        return "BoardUpdate";
+    }
+
+    @PostMapping("/boards/update/{id}")
+    public String update(Board board, @PathVariable("id") Integer id) throws SQLException {
+        service.boardUpdate(id,board);
+        return "redirect:/boards";
+    }
 }
+
