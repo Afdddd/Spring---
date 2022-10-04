@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import study.board.Board;
 import study.board.Service.BoardService;
 
@@ -43,7 +40,14 @@ public class BoardController {
 
     @GetMapping("/boards")
     public String boardList(Model model) throws SQLException {
-        model.addAttribute("list",service.boardList());
+        model.addAttribute("list", service.boardList());
         return "BoardList";
+    }
+
+    @GetMapping("/boards/view")
+    public String boardView(Model model, Integer id) throws SQLException {
+        log.info("id={}",id);
+        model.addAttribute("board",service.boardView(id));
+        return "BoardView";
     }
 }

@@ -22,4 +22,9 @@ public class BoardService {
       return repository.findAll();
     }
 
+    public Board boardView(int id) throws SQLException {
+        return repository.findById(id);
+
+    }
+
 }
