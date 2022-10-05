@@ -1,7 +1,8 @@
 package study.board.Repository;
 
-import org.assertj.core.api.Assertions;
+import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import study.board.Board;
 
@@ -11,10 +12,22 @@ import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static study.board.connection.ConnectionConst.*;
 
 class BoardRepositoryTest {
 
-    BoardRepository repository = new BoardRepository();
+    BoardRepository repository;
+    @BeforeEach
+    void beforeEach() {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(URL);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPassword(PASSWORD);
+
+        repository = new BoardRepository(dataSource);
+
+    }
+
 
     @AfterEach
     void afterEach() throws SQLException {

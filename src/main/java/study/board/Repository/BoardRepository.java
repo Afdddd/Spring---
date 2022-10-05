@@ -1,20 +1,29 @@
 package study.board.Repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
 import study.board.Board;
 import study.board.connection.DBConnectionUtil;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 @Slf4j
 @Repository
 public class BoardRepository {
 
     private static int sequence = 0;
+
+    @Autowired
+    private final DataSource dataSource;
+
+    public BoardRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Board save(Board board) throws SQLException {
         String sql = "insert into BOARD(id,title,contents) values(?,?,?)";
@@ -183,34 +192,18 @@ public class BoardRepository {
     }
 
     private void close(Connection con, Statement stmt, ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                log.info("error",e);
-            }
-        }
 
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                log.info("error",e);
-            }
-        }
+        JdbcUtils.closeResultSet(rs);
+        JdbcUtils.closeStatement(stmt);
+        JdbcUtils.closeConnection(con);
 
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                log.info("error",e);
-            }
-        }
 
     }
 
-    private Connection getConnection() {
-        Connection connection = DBConnectionUtil.getConnection();
+    private Connection getConnection() throws SQLException {
+
+        Connection connection = dataSource.getConnection();
+        log.info("connection={} class={}",connection,connection.getClass());
         return connection;
     }
 }

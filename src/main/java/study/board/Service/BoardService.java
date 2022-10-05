@@ -1,20 +1,33 @@
 package study.board.Service;
 
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import study.board.Board;
 import study.board.Repository.BoardRepository;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static study.board.connection.ConnectionConst.*;
+
 @Service
-@RequiredArgsConstructor
 public class BoardService {
 
-    private final BoardRepository repository;
+    BoardRepository repository = new BoardRepository(hikari());
+
+
+    public DataSource hikari() {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(URL);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPassword(PASSWORD);
+
+        return dataSource;
+    }
 
     public void write(Board board) throws SQLException {
         repository.save(board);
