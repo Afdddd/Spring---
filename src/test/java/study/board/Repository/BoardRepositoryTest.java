@@ -30,12 +30,12 @@ class BoardRepositoryTest {
 
 
     @AfterEach
-    void afterEach() throws SQLException {
+    void afterEach() {
         repository.clearRepository();
     }
 
     @Test
-    void save() throws SQLException {
+    void save() {
         //given
         Board board = new Board("title2", "asasasa2");
 
@@ -47,7 +47,7 @@ class BoardRepositoryTest {
     }
 
     @Test
-    void findById() throws SQLException {
+    void findById() {
         //given
         Board board = new Board("title", "asasasa2");
         repository.save(board);
@@ -60,7 +60,7 @@ class BoardRepositoryTest {
     }
 
     @Test
-    void findAll() throws SQLException {
+    void findAll()  {
         //given
         Board board1 = new Board("title1","asas");
         Board board2 = new Board("title2","asas");
@@ -77,7 +77,7 @@ class BoardRepositoryTest {
     }
 
     @Test
-    void update() throws SQLException {
+    void update()  {
         //given
         Board board = new Board("title", "asasasa2");
         repository.save(board);
@@ -94,7 +94,7 @@ class BoardRepositoryTest {
     }
 
     @Test
-    void delete() throws SQLException {
+    void delete() {
         //given
         Board board = new Board("title2", "asasasa2");
         repository.save(board);

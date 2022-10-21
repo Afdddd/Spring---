@@ -2,11 +2,11 @@ package study.board.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.support.JdbcUtils;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.stereotype.Repository;
 import study.board.Board;
-import study.board.connection.DBConnectionUtil;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -20,12 +20,14 @@ public class BoardRepository {
 
     @Autowired
     private final DataSource dataSource;
+    private final SQLExceptionTranslator exTranslator;
 
     public BoardRepository(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.exTranslator = new SQLErrorCodeSQLExceptionTranslator();
     }
 
-    public Board save(Board board) throws SQLException {
+    public Board save(Board board) {
         String sql = "insert into BOARD(id,title,contents) values(?,?,?)";
         board.setId(++sequence);
 
@@ -42,15 +44,14 @@ public class BoardRepository {
             pstmt.executeUpdate();
             return board;
         } catch (SQLException e) {
-            log.error("DB error",e);
-            throw e;
+            throw exTranslator.translate("save", sql, e);
         }
         finally {
             close(con, pstmt, rs);
         }
     }
 
-    public Board findById(int id) throws SQLException {
+    public Board findById(int id) {
         String sql = "select * from BOARD where id =?";
 
         Connection con = null;
@@ -74,15 +75,14 @@ public class BoardRepository {
             }
 
         }catch (SQLException e){
-            log.error("DB error",e);
-            throw e;
+            throw exTranslator.translate("findById", sql, e);
         }
         finally {
             close(con,pstmt,rs);
         }
     }
 
-    public List<Board> findAll() throws SQLException {
+    public List<Board> findAll() {
         String sql = "select * from board";
 
         Connection con = null;
@@ -97,8 +97,7 @@ public class BoardRepository {
 
             return list;
         } catch (SQLException e) {
-            log.error("DB error",e);
-            throw e;
+            throw exTranslator.translate("findAll", sql, e);
         }
     }
 
@@ -131,7 +130,7 @@ public class BoardRepository {
 
     }
 
-    public void update(int id,Board board) throws SQLException {
+    public void update(int id,Board board) {
         String sql = "update Board set title=?, contents=? where id=?";
 
         Connection con = null;
@@ -147,8 +146,7 @@ public class BoardRepository {
             int resultSize = pstmt.executeUpdate();
             log.info("resultSize={}",resultSize);
         } catch (SQLException e) {
-            log.error("DB error", e);
-            throw e;
+            throw exTranslator.translate("update", sql, e);
         }finally {
             close(con, pstmt, rs);
         }
@@ -168,13 +166,13 @@ public class BoardRepository {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            log.error("DB error");
+            throw exTranslator.translate("delete", sql, e);
         }finally {
             close(con,pstmt,null);
         }
     }
 
-    public void clearRepository() throws SQLException {
+    public void clearRepository() {
         String sql = "delete from board";
 
         Connection con = null;
@@ -186,8 +184,7 @@ public class BoardRepository {
             pstmt = con.prepareStatement(sql);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            log.error("DB error", e);
-            throw e;
+            throw exTranslator.translate("clear", sql, e);
         }
     }
 
