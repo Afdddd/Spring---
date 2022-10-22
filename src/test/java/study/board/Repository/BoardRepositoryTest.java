@@ -102,7 +102,7 @@ class BoardRepositoryTest {
         repository.delete(board.getId());
 
         //then
-        assertThrows(NoSuchElementException.class,()->repository.findById(board.getId()));
+
     }
 
 }

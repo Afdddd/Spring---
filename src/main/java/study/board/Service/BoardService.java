@@ -29,11 +29,11 @@ public class BoardService {
         return dataSource;
     }
 
-    public void write(Board board) throws SQLException {
+    public void write(Board board)  {
         repository.save(board);
     }
 
-    public List<Board> boardList() throws SQLException {
+    public List<Board> boardList() {
         List list = new ArrayList();
      try {
          list = repository.findAll();
@@ -43,7 +43,7 @@ public class BoardService {
         return list;
     }
 
-    public Board boardView(int id) throws SQLException {
+    public Board boardView(int id){
         return repository.findById(id);
 
     }
@@ -52,7 +52,7 @@ public class BoardService {
         repository.delete(id);
     }
 
-    public void boardUpdate(int id, Board board) throws SQLException {
+    public void boardUpdate(int id, Board board) {
         repository.update(id, board);
     }
 
